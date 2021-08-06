@@ -1,0 +1,1 @@
+Delete this and put your discord bot token in here
