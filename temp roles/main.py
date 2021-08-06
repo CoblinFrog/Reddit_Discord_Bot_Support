@@ -18,6 +18,7 @@ async def on_ready():
 
 
 @client.command()
+@has_permissions(administrator=True)
 async def temp(ctx, *args):
     role = get(ctx.message.guild.roles, name = "Role") # change this to the name of the role you want
     for user in ctx.message.guild.members:
