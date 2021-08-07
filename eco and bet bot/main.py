@@ -84,15 +84,11 @@ async def end(ctx, *args):
                         data2=json.load(fs); data2[str(user)] += sum
                         fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
                 
-
-
                 for user in data[str(args[0])]["2"]["players"]:
                     with open("eco.json", "r+") as fs:
                         data2=json.load(fs); data2[str(user)] -= sum
                         fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
                 
-
-
                 for line in list(data):
                     if str(args[0]) in line:
                         del data[str(args[0])]
@@ -135,8 +131,17 @@ async def wallet(ctx):
 
 
 
-
-
+@client.command()
+async def pay(ctx, *args):
+    with open("eco.json", "r+") as f:
+        data=json.load(f)
+        user_id = str(list(args)[0]).strip("<").strip(">").strip("@").replace('!', '')
+        if data[str(ctx.author.id)] > 0:
+            data[str(ctx.author.id)] -= list(args)[1]; data[str(user_id)] += list(args)[1]
+            f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
+            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} has sent {list(args)[1]} to {list(args)[0]}', color=65280))
+        else:
+            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} does not have enough money', color=65280))
 
 
 
