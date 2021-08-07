@@ -85,7 +85,7 @@ async def end(ctx, *args):
             if str(args[1]) == "1":
                 for user in data[str(args[0])]["1"]["players"]:
                     user_count += 1
-                    sum += data[str(args[0])]["1"]["players"][str(user)] / user_count
+                    sum += data[str(args[0])]["2"]["players"][str(user)] / user_count
                     with open("eco.json", "r+") as fs:
                         data2=json.load(fs); data2[str(user)] += sum
                         fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
@@ -108,7 +108,7 @@ async def end(ctx, *args):
             elif str(args[1]) == "2":
                 for user in data[str(args[0])]["2"]["players"]:
                     user_count += 1
-                    sum += data[str(args[0])]["2"]["players"][str(user)] / user_count
+                    sum += data[str(args[0])]["1"]["players"][str(user)] / user_count
                     with open("eco.json", "r+") as fs:
                         data2=json.load(fs); data2[str(user)] += sum
                         fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
