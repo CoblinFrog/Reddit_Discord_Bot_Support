@@ -17,7 +17,7 @@ async def on_ready():
 
 @client.command()
 @has_permissions(manage_messages=True)
-async def mute(ctx, user : discord.Member, *, reason="None"):
+async def mute(ctx, user : discord.Member):
     role = get(ctx.message.guild.roles, name="Muted") # Name of the role you want to add to the person
     await user.add_roles(role)
     await ctx.send(f"Muted {user.mention}")
