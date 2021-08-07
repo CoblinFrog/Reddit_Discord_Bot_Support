@@ -23,8 +23,9 @@ async def check(ctx):
             with open("check.json", "r+") as f:
                 data=json.load(f)
                 if str(msg.author) not in data:
-                    data.update({str(msg.author) : 1})
+                    data.update({str(msg.author) : 0})
                     f.seek(0); json.dump(data, f, indent=5); f.truncate()
+                    data[str(msg.author)] += 1
                 else:
                     data[str(msg.author)] += 1
 
