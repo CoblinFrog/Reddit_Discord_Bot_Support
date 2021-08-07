@@ -52,20 +52,14 @@ async def bet(ctx, *args):
     with open("bets.json", "r+") as f:
         data=json.load(f)
 
-        if str(ctx.author.id) in data[str(args[0])]["owner"] and int(args[2]) > 100:
-            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} bet owners cannot bet over **100$**', color=65280))
-
+        if not str(ctx.author.id) in data[str(args[0])][str(args[1])]["players"]:
+            data[str(args[0])][str(args[1])]["players"].update({str(ctx.author.id) : int(args[2])})
+            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} added a bet of **{args[2]}$**', color=65280))
+            f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
         else:
-            if not str(ctx.author.id) in data[str(args[0])][str(args[1])]["players"]:
-                data[str(args[0])][str(args[1])]["players"].update({str(ctx.author.id) : int(args[2])})
-                await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} added a bet of **{args[2]}$**', color=65280))
-                f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
-                
-
-            else:
-                data[str(args[0])][str(args[1])]["players"][str(ctx.author.id)] += int(args[2])
-                await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} bet is now at **{data[str(args[0])][str(args[1])]["players"][str(ctx.author.id)]}$**', color=65280))
-                f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
+            data[str(args[0])][str(args[1])]["players"][str(ctx.author.id)] += int(args[2])
+            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} bet is now at **{data[str(args[0])][str(args[1])]["players"][str(ctx.author.id)]}$**', color=65280))
+            f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
         
         with open("eco.json", "r+") as eco:
             eco_data = json.load(eco); eco_data[str(ctx.author.id)] -= int(args[2])
