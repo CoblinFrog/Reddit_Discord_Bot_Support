@@ -108,7 +108,7 @@ async def end(ctx, *args):
                         del data[str(args[0])]
                         f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
 
-                await ctx.send(embed=discord.Embed(title='Bet Ended', description=f'**Owner: **{ctx.author.mention}\n **Correct Answer: **{str(args[1])}', color=65280))
+                await ctx.send(embed=discord.Embed(title='Bet Ended', description=f'**Owner: **{ctx.author.mention}\n **Correct Answer: **#{str(args[1])}', color=65280))
         else:
             await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} you are not the owner of this bet', color=65280))
 
