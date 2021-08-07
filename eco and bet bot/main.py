@@ -19,7 +19,7 @@ async def on_member_join(member):
     with open("json/eco.json", "r+") as f:
         data=json.load(f)
         if not str(member.id) in data:
-            data.update({str(member.id) : 100})
+            data.update({str(member.id) : 250})
             f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
 
 
@@ -41,7 +41,6 @@ async def startbet(ctx, *args):
         q1 = ' '.join(str(enum) for enum in args); question = q1.replace(f' {ans1}', '').replace(f' {ans2}', '')
 
         await ctx.send(embed=discord.Embed(title=f'Bet #{count}: "{question}"', description=f'1️⃣ **{ans1}**\n2️⃣ **{ans2}**', color=65280))
-
 
 
 
@@ -68,41 +67,41 @@ async def bet(ctx, *args):
 
 
 
-
 @client.command()
 async def end(ctx, *args):
     args = list(args)
     with open("json/bets.json", "r+") as f:
         data=json.load(f)
-        sum = 0; user_count = 0
 
         if data[str(args[0])]["owner"] == str(ctx.author.id):
             with open("json/eco.json", "r+") as fs:
                 data2=json.load(fs)
                 if str(args[1]) == "1":
-                    for user in data[str(args[0])]["1"]["players"]:
-                        user_count += 1
-                        sum += data[str(args[0])]["2"]["players"][str(user)] / user_count
-                        data2[str(user)] += sum
-                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
-                    
+                    sum = 0; user_count = 0
                     for user in data[str(args[0])]["2"]["players"]:
-                        data2[str(user)] -= sum
-                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
+                        sum += data[str(args[0])]["2"]["players"][str(user)]
+
+                    for _ in data[str(args[0])]["1"]["players"]:
+                        user_count += 1
+
+                    for user in data[str(args[0])]["1"]["players"]:
+                        data2[str(user)] += round((sum / user_count) + data[str(args[0])]["1"]["players"][str(user)])
+                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate()
                     
 
                 elif str(args[1]) == "2":
-                    for user in data[str(args[0])]["2"]["players"]:
-                        user_count += 1
-                        sum += data[str(args[0])]["1"]["players"][str(user)] / user_count
-                        data2[str(user)] += sum
-                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
-                    
+                    sum = 0; user_count = 0
                     for user in data[str(args[0])]["1"]["players"]:
-                        data2[str(user)] -= sum
-                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate(); fs.close()
+                        sum += data[str(args[0])]["1"]["players"][str(user)]
 
+                    for _ in data[str(args[0])]["2"]["players"]:
+                        user_count += 1
 
+                    for user in data[str(args[0])]["2"]["players"]:
+                        data2[str(user)] += round((sum / user_count) + data[str(args[0])]["2"]["players"][str(user)])
+                        fs.seek(0); json.dump(data2, fs, indent=4); fs.truncate()
+                    
+                    
                 for line in list(data):
                     if str(args[0]) in line:
                         del data[str(args[0])]
@@ -111,7 +110,6 @@ async def end(ctx, *args):
                 await ctx.send(embed=discord.Embed(title='Bet Ended', description=f'**Owner: **{ctx.author.mention}\n **Correct Answer: **#{str(args[1])}', color=65280))
         else:
             await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} you are not the owner of this bet', color=65280))
-
 
 
 
@@ -130,13 +128,12 @@ async def pay(ctx, *args):
     with open("json/eco.json", "r+") as f:
         data=json.load(f)
         user_id = str(list(args)[0]).strip("<").strip(">").strip("@").replace('!', '')
-        if data[str(ctx.author.id)] -= list(args)[1] > 0:
-            data[str(ctx.author.id)] -= list(args)[1]; data[str(user_id)] += list(args)[1]
+        if data[str(ctx.author.id)] - int(list(args)[1]) > 0:
+            data[str(ctx.author.id)] -= int(list(args)[1]); data[str(user_id)] += list(args)[1]
             f.seek(0); json.dump(data, f, indent=4); f.truncate(); f.close()
-            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} has sent {list(args)[1]} to {list(args)[0]}', color=65280))
+            await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} has sent **{list(args)[1]}$** to {list(args)[0]}', color=65280))
         else:
             await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} does not have enough money', color=65280))
-
 
 
 
