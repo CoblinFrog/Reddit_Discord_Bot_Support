@@ -35,7 +35,7 @@ class Core(commands.Cog):
             data=json.load(f)
             for line in data:
                 if line == name:
-                    del line
+                    del data[line]
                     await ctx.send(embed=discord.Embed(description=f'{ctx.author.mention} has removed **{name}** from the database', color=65535))
                     self.write("data", data, f)
         
