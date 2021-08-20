@@ -1,5 +1,6 @@
 import discord, json, os, os.path
 from discord.ext import commands
+from discord.ext.commands import has_permissions
 
 class Core(commands.Cog):
     def __init__(self, client):
@@ -40,6 +41,7 @@ class Core(commands.Cog):
     # RESET THE USERS LIST AND ADD EVERYONE IN THE SERVER TO IT (=members COMMAND)
     # /////////////////////////////////////////////////////////
     @commands.command()
+    @has_permissions(administrator=True)
     async def members(self, ctx):
         with open(os.path.dirname(__file__) + f"\\..\\json\\data.json", "r+") as f:
             data=json.load(f)
