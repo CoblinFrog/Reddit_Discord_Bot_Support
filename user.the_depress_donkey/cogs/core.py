@@ -37,6 +37,21 @@ class Core(commands.Cog):
 
 
 
+    # RESET THE USERS LIST AND ADD EVERYONE IN THE SERVER TO IT (=members COMMAND)
+    # /////////////////////////////////////////////////////////
+    @commands.command()
+    async def members(self, ctx):
+        with open(os.path.dirname(__file__) + f"\\..\\json\\data.json", "r+") as f:
+            data=json.load(f)
+            data["users"] = []
+            for user in ctx.guild.members:
+                data["users"].append(user)
+            self.write("data", data)
+        await ctx.send(embed=discord.Embed(title='Member', description=f'{data["users"]}', color=65535))
+
+
+
+
 # SETTING UP THE COG
 # //////////////////
 def setup(client):
