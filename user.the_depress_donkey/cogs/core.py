@@ -1,4 +1,4 @@
-import discord, json
+import discord, json, os, os.path
 from discord.ext import commands
 
 class Core(commands.Cog):
@@ -8,7 +8,7 @@ class Core(commands.Cog):
     # FUNCTION USED TO WRITE DATA TO THE JSON FILE
     # ////////////////////////////////////////////
     def write(self, file, data):
-        with open(f"{file}.json", "w") as f:
+        with open(os.path.dirname(__file__) + f"\\..\\json\\{file}.json", "w") as f:
             json.dump(data, f, indent=4)
 
 
@@ -17,7 +17,7 @@ class Core(commands.Cog):
     # /////////////////////////////////////////
     @commands.Cogs.listener
     async def on_member_join(self, member):
-        with open("people.json", "r+") as f:
+        with open(os.path.dirname(__file__) + f"\\..\\json\\data.json", "r+") as f:
             data=json.load(f)
             data["users"].append(member)
             self.write("data", data)
@@ -28,7 +28,7 @@ class Core(commands.Cog):
     # ///////////////////////////////////////////////
     @commands.Cogs.listener
     async def on_member_leave(self, member):
-        with open("people.json", "r+") as f:
+        with open(os.path.dirname(__file__) + f"\\..\\json\\data.json", "r+") as f:
             data=json.load(f)
             data["users"].remove(member)
             self.write("data", data)
