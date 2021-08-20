@@ -49,7 +49,7 @@ class Core(commands.Cog):
             for user in ctx.guild.members:
                 data["users"].append(user)
             self.write("data", data)
-        await ctx.send(embed=discord.Embed(title='Member', description=f'{data["users"]}', color=65535))
+        await ctx.send(embed=discord.Embed(title='Members List', description=f'{data["users"]}', color=65535))
 
 
 
