@@ -33,7 +33,6 @@ class Core(commands.Cog):
             data=json.load(f)
             data["users"].remove(member)
             self.write("data", data)
-        
         await member.send("Message you want to send them when they leave the server")
 
 
