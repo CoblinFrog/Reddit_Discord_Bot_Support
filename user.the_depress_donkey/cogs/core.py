@@ -38,7 +38,7 @@ class Core(commands.Cog):
 
 
 
-    # RESET THE USERS LIST AND ADD EVERYONE IN THE SERVER TO IT (=members COMMAND)
+    # RESET THE USERS LIST AND ADD EVERYONE IN THE SERVER TO IT (=members) COMMAND
     # /////////////////////////////////////////////////////////
     @commands.command()
     @has_permissions(administrator=True)
